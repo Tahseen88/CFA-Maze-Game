@@ -16,7 +16,7 @@ Name,Score
 $
 ```
 
-The game has four classes and a main file to link all the modules together.
+The game has four classes and a main file "start.rb" to link all the modules together.
 # start.rb
 ```rb
 ['board', 'character', 'game', 'maps'].each{ |f| require_relative f }
