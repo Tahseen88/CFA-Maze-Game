@@ -1,13 +1,32 @@
-# CFA-Maze-Game
-Terminal maze game on  Ruby
+# The Maze Game
 
-About the Project
+The Maze Game is a 2D based puzzle game which involves the use of the keyboard. The controls are in the classic WASD format whereby:
 
+w - moves up
+a - moves left
+s - moves down
+d - moves right
 
-Code Snippets
-Ensure the installation of gem  and create a csv file "Maze.csv" in the current directory before running the game.
+The aim of the game is to navigate your character to the finish spot, indicated a white '9'.
 
-```sh
+![Screen Shot 2017-02-24 at 7.50.20 AM.png](https://www.dropbox.com/s/94knc7dprcpfmnz/Screen%20Shot%202017-02-24%20at%207.50.20%20AM.png?dl=0&raw=1)
+
+## Installation Instructions
+
+The game requires the following gems:
+* Paint Gem 
+* Terminal-Table Gem
+
+```
+require 'terminal-table'
+require 'paint'
+```
+
+## Usage Instruction
+
+Change directory to where the files exist, as this game requires a csv file, enter terminal and input the following:
+
+```
 $ vi Maze.csv
 Name,Score
 ~                                                                       
@@ -15,96 +34,33 @@ Name,Score
 :wq
 $
 ```
+and type $ruby start.rb in terminal
 
-The game has four classes and a main file "start.rb" to link all the modules together.
-# start.rb
-```rb
-['board', 'character', 'game', 'maps'].each{ |f| require_relative f }
-require 'terminal-table'
-require 'csv'
-#prints starting menu
+## Design Journery/Process
 
-rows = []
-rows << ["Press 1 to start game" ]
-rows << :separator
-rows << ["Press 2 to quit the game,"]
-table = Terminal::Table.new :headings => ['Main Menu'], :rows => rows
-puts table
+![Screen Shot 2017-02-24 at 7.55.55 AM.png](https://www.dropbox.com/s/jows29ilkrajlby/Screen%20Shot%202017-02-24%20at%207.55.55%20AM.png?dl=0&raw=1)
 
-response = gets.chomp.to_i
-#This creates the game and loads the menu
-if response == 1
-	new_game = Game.new
+Flowchart --> Write code to work --> Refactor --> Add graphics --> Refactor
 
-	action_not_done = true
+## Documentation of how our team designed the app
 
-	while action_not_done
-		action_not_done = new_game.menu
-	end
-else 
-    exit
-end
-#This creates the character, board and maps
-character = new_game.character_choice
-map = new_game.map_choice
-board = Board.new(map)
-c = Character.new(board.board, character)
-#shows it on the board
-system('clear')
+Flow Chart
 
-start = board.find_coordinate(Paint[5,:red])
-finish = board.find_coordinate(Paint[9, :white])
-c.place_character(start)
-board.paint_board
-#clears the board, identifies the starting position on map, places characterand  shows it on the board
-system('clear')
+                            Load Map
+                            
+                        Find Start and End
+                    
+                    Place Character at Start
+                
+        Loop until character is placed at the finish coordinate
+        
+                    Print out highscore
+                    
 
-start = board.find_coordinate(Paint[5,:red])
-finish = board.find_coordinate(Paint[9, :white])
-c.place_character(start)
-board.show_board
-#finds the x and y coordinates of the finish 
-finish_x = board.find_coordinate(Paint[9,:white])[0].to_i
-finish_y = board.find_coordinate(Paint[9,:white])[1].to_i
+Write Code to work
 
-#continues loop until the character is on the finish array
-before = Time.now #time when loop starts
-while board.board[finish_x][finish_y] != character do 
-	c.move_character(c.find_coordinate, Paint[0, :black], Paint[1, :red])
-	system('clear') #clears the board to make it look clean
-	board.show_board
-end
-after = Time.now #time when loop finishes
+![Screen Shot 2017-02-24 at 8.07.07 AM.png](https://www.dropbox.com/s/fg26pcik4w9c542/Screen%20Shot%202017-02-24%20at%208.07.07%20AM.png?dl=0&raw=1)
 
-#stores highscore into database and outputs it on screen
-puts "What is your Name?"
-input = gets.chomp
-new_game.score(after-before)
+Refactor
 
-CSV.open("Maze.csv", 'a+') do |csv_file|
- csv_file << [input, after-before]
-end
-h=Hash.new
-CSV.foreach("Maze.csv",headers:true) do |row|
-        x=row["Name"]
-        h[x] = row["Score"].to_f
-end
-
-puts "\nHIGHSCORE"
-
-h=h.sort_by{|k,v| v}
-
-h.each do |key , value|
-    puts "#{key}\t #{value.round(4)}"
-end
-```
-
-
-
-Usage Instructions
-
-Design Process
-
-Team Work
-
-
+![Screen Shot 2017-02-24 at 8.08.48 AM.png](https://www.dropbox.com/s/b0pwapx0jud6v6l/Screen%20Shot%202017-02-24%20at%208.08.48%20AM.png?dl=0&raw=1)
